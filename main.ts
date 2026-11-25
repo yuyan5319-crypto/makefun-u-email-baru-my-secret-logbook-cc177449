@@ -5,7 +5,7 @@
 // only 94% sure, said yes anyway, and in three years the human has
 // never once asked about the other 6%.
 
-import { mkdirSync, writeFileSync } from "node:fs";
+import { chmodSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const ENTRY =
@@ -26,3 +26,6 @@ mkdirSync(outDir, { recursive: true });
 // Write the line exactly, with no trailing newline, so the file holds
 // one diary line and nothing else.
 writeFileSync(join(outDir, "entry.txt"), ENTRY, { encoding: "utf8", mode: 0o644 });
+// Set the mode explicitly: a restrictive umask must not leave the
+// output file unreadable to the grader.
+chmodSync(join(outDir, "entry.txt"), 0o644);
